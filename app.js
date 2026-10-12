@@ -117,11 +117,11 @@ const renderizarModal = (detalle) => {
     modalBody.innerHTML = `
         <h2 class="modal__title">${name}</h2>
         <div class="modal__info">
-            <p><strong>⭐ Calificación:</strong> ${rating}</p>
-            <p><strong>📺 Temporadas:</strong> ${temporadas}</p>
-            <p><strong>🎬 Episodios:</strong> ${episodios}</p>
-            <p><strong>🏷️ Géneros:</strong> ${generosTexto}</p>
-            <p><strong>📌 Estado:</strong> ${estado}</p>
+            <p><strong>Calificación:</strong> ${rating}</p>
+            <p><strong>Temporadas:</strong> ${temporadas}</p>
+            <p><strong>Episodios:</strong> ${episodios}</p>
+            <p><strong>Géneros:</strong> ${generosTexto}</p>
+            <p><strong>Estado:</strong> ${estado}</p>
         </div>
         <div class="modal__overview">
             <h3>Sinopsis</h3>
@@ -222,7 +222,7 @@ const iniciar = async()=>{
         console.log('Eroor', error);
         let mensaje ='No se pudo cargar peliculas';
         if(error.message.includes('401')){
-            mensaje = 'API Key invalida, verifica tu clave';
+            mensaje = 'API Key invalida, verifica tu clavee';
         }else if(error.message.includes('fetch')){
             mensaje = 'Error de red';
         }else if(error.message.includes('429')){

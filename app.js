@@ -16,7 +16,7 @@ const modal         = document.getElementById('serie-modal');
 const modalBody     = document.getElementById('modal-body');
 const modalClose    = document.getElementById('modal-close');
 const modalOverlay  = document.getElementById('modal-overlay');
-
+const btnCard = document.getElementById('card-btn');
 
 // ============================================================================
 // UTILIDADES DE UI (DADO - no modificar)
@@ -75,6 +75,7 @@ const crearTarjeta=(serie) =>{
     const imagen = poster_path ? `${IMAGE_URL}${poster_path}`:'';
     const rating = vote_average ? vote_average.toFixed(1):'N/A';
     return `
+    
         <article class="series-card">
             <div class="serie-card__poster">
                 <img class="serie-card__image" src = "${imagen}" alt="${name}">
@@ -85,9 +86,10 @@ const crearTarjeta=(serie) =>{
                 <p class="serie-card__year">${año}</p>
             </div>
         </article>
+    
     `;
 }
-/*
+
 const busqueda = async(texto)=>{
     if(!texto || texto.trim() === ''){
         return obtenerSeries;
@@ -125,7 +127,10 @@ clearBtn.addEventListener('click', () =>{
     searchInput.value = "";
     iniciar();
 })
-*/
+
+
+
+
 const iniciar = async()=>{
     console.log('Mostrar series');
     mostrarLoading();
@@ -153,6 +158,7 @@ const iniciar = async()=>{
     //console.log('Primera pelicula',primera);
     
 }
+
 
 
 

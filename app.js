@@ -1,3 +1,10 @@
+/*
+Gabriel Alejandro Pacheco Quispe
+Paralelo: 2
+CI: 9099972
+*/
+
+
 const API_KEY = 'c5ef1b76f88f2933cd39ccfdbee6a481'; 
 const BASE_URL = 'https://api.themoviedb.org/3';
 const IMAGE_URL = 'https://image.tmdb.org/t/p/w500';
@@ -68,7 +75,13 @@ const obtenerSeries = async()=>{
     console.log("Obtener Series");
     return datos.results;
 }
-
+const obtenerInfo = async (id)=>{
+    const url = `${BASE_URL}/tv/${id}?api_key=${API_KEY}&language=es-ES`;
+    const respuesta = await fetch(url);
+    const datos = await respuesta.json();
+    console.log("Obtener Series");
+    return datos;
+}
 const crearTarjeta=(serie) =>{
     const{name, first_air_date, vote_average,poster_path} = serie;
     const año = first_air_date;
@@ -89,6 +102,69 @@ const crearTarjeta=(serie) =>{
     
     `;
 }
+const renderizarModal = (detalle) => {
+    const { name, overview, number_of_seasons, number_of_episodes, genres, status, vote_average } = detalle;
+
+    const sinopsis = overview ? overview : 'No hay sinopsis disponible.';
+    const temporadas = number_of_seasons || 'N/A';
+    const episodios = number_of_episodes || 'N/A';
+    const generosTexto = genres && genres.length > 0 
+        ? genres.map(g => g.name).join(', ') 
+        : 'No especificado';
+    const estado = status || 'N/A';
+    const rating = vote_average ? vote_average.toFixed(1) : 'N/A';
+
+    modalBody.innerHTML = `
+        <h2 class="modal__title">${name}</h2>
+        <div class="modal__info">
+            <p><strong>⭐ Calificación:</strong> ${rating}</p>
+            <p><strong>📺 Temporadas:</strong> ${temporadas}</p>
+            <p><strong>🎬 Episodios:</strong> ${episodios}</p>
+            <p><strong>🏷️ Géneros:</strong> ${generosTexto}</p>
+            <p><strong>📌 Estado:</strong> ${estado}</p>
+        </div>
+        <div class="modal__overview">
+            <h3>Sinopsis</h3>
+            <p>${sinopsis}</p>
+        </div>
+    `;
+};
+const abrirModal = async (id) => {
+    try {
+        modalBody.innerHTML = '<p>Cargando detalles...</p>';
+        modal.classList.add('modal--show');
+        
+        const detalles = await obtenerInfo(id);
+        crearModal(detalles);
+    } catch (error) {
+        console.error('Error al obtener detalles:', error);
+        modalBody.innerHTML = '<p>Error al cargar la información de la serie.</p>';
+    }
+};
+const cerrarModal = () => {
+    modal.classList.remove('modal--show');
+};
+
+
+modalClose.addEventListener('click', cerrarModal);
+modalOverlay.addEventListener('click', cerrarModal);
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('modal--show')) {
+        cerrarModal();
+    }
+});
+
+// Evento al hacer clic en cualquier tarjeta de serie
+seriesGrid.addEventListener('click', (e) => {
+    const tarjeta = e.target.closest('.serie-card');
+    if (tarjeta) {
+        const id = tarjeta.dataset.id;
+        if (id) {
+            abrirModal(id);
+        }
+    }
+});
 
 const busqueda = async(texto)=>{
     if(!texto || texto.trim() === ''){
@@ -101,6 +177,9 @@ const busqueda = async(texto)=>{
     console.log("Obtener Series");
     return datos.results;
 }
+
+
+
 let timeoutBusqueda = null;
 searchInput.addEventListener('input',(evento) => {
     const texto = evento.target.value;
@@ -127,7 +206,6 @@ clearBtn.addEventListener('click', () =>{
     searchInput.value = "";
     iniciar();
 })
-
 
 
 
